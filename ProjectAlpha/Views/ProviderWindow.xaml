@@ -1,0 +1,240 @@
+﻿<Window x:Class="ProjectAlpha.ProviderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectAlpha"
+        xmlns:viewModels="clr-namespace:ProjectAlpha.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="ProviderWindow"
+        WindowStyle="None"
+        ResizeMode="NoResize"        
+        BorderThickness="1"
+        ShowInTaskbar="False"
+        BorderBrush="#1e1f1e"
+        Height="{Binding height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+        Width="{Binding width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+        Top="{Binding top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Left="{Binding left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+    <Window.DataContext>
+        <viewModels:ProvidersViewModel x:Name="vM"/>
+    </Window.DataContext>
+
+    <Grid>
+        <!--#region  Barra Superior-->
+        <Grid Height="40" VerticalAlignment="Top">
+            <Rectangle>
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5, 0.1">
+                        <GradientStop Color="#5ea0fa"/>
+                        <GradientStop Color="#3f51b5" Offset="1"/>
+                        <GradientStop Color="#326bc9" Offset="0.2"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Text="Fornecedores" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" Foreground="{StaticResource PrimaryHueLightForegroundBrush}" Margin="0,5">
+                <TextBlock.Effect>
+                    <DropShadowEffect Direction="-20" RenderingBias="Quality" BlurRadius="5"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button x:Name="minimizeBtn" Command="{Binding minimizeWindowCommand}" Content="{materialDesign:PackIcon Kind=Minus, Size=20}" Width="25" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,35,0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent"/>
+            <Button x:Name="closeBtn" Command="{Binding closeWindowCommand}" Content="{materialDesign:PackIcon Kind=Close, Size=20}" Width="25" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,3,0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent"/>
+        </Grid>
+        <!--#endregion-->
+        <Grid Margin="0,40,0,0">            
+            <!--#region Controle de abas-->
+            <dragablz:TabablzControl>
+                <!--#region ABA CONSULTA-->
+                <TabItem x:Name="consultaTabMenu" Header="Consulta" IsSelected="{Binding isQueryTabFocused}">
+                    <Grid Margin="10,20,10,0" VerticalAlignment="Top" >
+                        <StackPanel Margin="0,0,0,20" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                
+                                <!--#region Campo de Busca -->
+                                
+                                <TextBox  Text="{Binding searchFieldText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         x:Name="providerQueryTextBox" 
+                                         AcceptsReturn="False"
+                                         Width="300" 
+                                         materialDesign:HintAssist.Hint="Fornecedor" 
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"                                          
+                                         FontSize="14">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding searchProviderCommand}" Key="Return"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <!--#endregion-->
+                                
+                                <!--#region  Botão Buscar-->
+                                <Button  Command="{Binding searchProviderCommand}" Margin="10,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Search" Margin="0,3,3,0" HorizontalAlignment="Left"/>
+                                            <TextBlock Text="Buscar"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <!--#endregion-->
+                                
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">  
+                                
+                                <!--#region GRID PRINCIPAL-->
+                                <DataGrid RowBackground="White" 
+                                          ClipToBounds="True"
+                                          Background="#97c8fc"                                          
+                                          AutoGenerateColumns="False" 
+                                          ItemsSource="{Binding dataGridSource}" 
+                                          SelectedItem="{Binding gridCurrentProvider, Mode=TwoWay}"                                          
+                                          HorizontalScrollBarVisibility="Auto" 
+                                          VerticalScrollBarVisibility="Auto"
+                                          Margin="20,30,20,10"
+                                          IsReadOnly="True"
+                                          BorderThickness="2" 
+                                          BorderBrush="{StaticResource PrimaryHueDarkBrush}" 
+                                          CanUserAddRows="False" 
+                                          CanUserDeleteRows="False" 
+                                          SelectionMode="Single" 
+                                          SelectionUnit="FullRow"
+                                          GridLinesVisibility="All" 
+                                          VerticalGridLinesBrush="{StaticResource PrimaryHueDarkBrush}" 
+                                          HorizontalGridLinesBrush="{StaticResource PrimaryHueDarkBrush}" 
+                                          AreRowDetailsFrozen="True" 
+                                          CanUserResizeColumns="True"
+                                          CanUserResizeRows="False"                                           
+                                          MaxWidth="1000">
+
+                                    <!--#region ESTILO DO DATAGRID -->
+                                    <DataGrid.Resources>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.Resources>
+                                    <!--#endregion-->
+
+                                    <!--#region AÇÃO CLICK DUPLO-->
+                                    <DataGrid.InputBindings>
+                                        <MouseBinding MouseAction="LeftDoubleClick"
+                                            Command="{Binding gridDoubleClickCommand}"
+                                            CommandParameter="providers"/>
+                                    </DataGrid.InputBindings>
+                                    <!--#endregion-->
+                                    
+                                    <!--#region COLUNAS-->
+                                    <DataGrid.Columns>
+                                        
+                                        <DataGridTextColumn Binding="{Binding id}" Header="ID" Width="55"/>
+                                        <DataGridTextColumn Binding="{Binding name}" Header="Fornecedor" Width="130"/>
+                                        <DataGridTextColumn Binding="{Binding social_name}" Header="Razão Social" Width="130"/>
+                                        <DataGridTextColumn Binding="{Binding cnpj}" Header="CNPJ" Width="90"/>
+                                        <DataGridTextColumn Binding="{Binding adress}" Header="Endereço" Width="130"/>
+                                        <DataGridTextColumn Binding="{Binding phone}" Header="Telefone" Width="100"/>
+                                        <DataGridTextColumn Binding="{Binding email}" Header="Email" Width="110"/>
+                                        <DataGridTextColumn Binding="{Binding main_activity}" Header="Ramo" Width="110"/>
+                                        <DataGridCheckBoxColumn Binding="{Binding active}" Header="Ativo" ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}" Width="80"/>
+                                    </DataGrid.Columns>
+                                    <!--#endregion-->
+                                </DataGrid>
+                                <!--#endregion-->
+                                
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,60,0,0">
+                                <Button Command="{Binding newProviderCommand}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="PersonAdd" Foreground="White" Margin="0,2,8,0"/>
+                                            <TextBlock Text="Novo"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Button Command="{Binding deleteGridProviderCommand}" Margin="50,0,0,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="PersonRemove" Foreground="White" Margin="0,2,8,0"/>
+                                            <TextBlock Text="Excluir"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <!--#endregion-->
+                <!--#region ABA CADASTRO-->
+                <TabItem Name="cadastroTabMenu" Header="Cadastro" IsSelected="{Binding isRegisterTabFocused}">
+                    <Grid Margin="0,20,10,0" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        
+                        <!--#region Campos do cadastro-->
+                        <StackPanel DataContext="{Binding currentProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                    Orientation="Vertical" 
+                                    VerticalAlignment="Top" 
+                                    HorizontalAlignment="Center">                            
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                                <TextBox x:Name="providerNameTextBox" LostFocus="RemoveSpaces" PreviewTextInput="CleanText" MaxLength="300" Text="{Binding Path=name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" materialDesign:HintAssist.Hint="Fornecedor" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="14"/>
+                                <TextBox x:Name="socialTextBox" LostFocus="RemoveSpaces" PreviewTextInput="CleanText" MaxLength="300"  Margin="80, 0,0,0" Width="250" Text="{Binding social_name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Razão Social" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="14"/>
+                                <StackPanel/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBox x:Name="cnpjTextBox" materialDesign:TextFieldAssist.TextFieldCornerRadius="5" PreviewKeyDown="SpaceKeyDown" PreviewTextInput="OnlyNumbers" MaxLength="14" Text="{Binding cnpj, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" materialDesign:HintAssist.Hint="CNPJ" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="14">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding ElementName=vM,Path=GetWebProviderCommand}" Key="Return"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <TextBox x:Name="adressTextBox" LostFocus="RemoveSpaces" PreviewTextInput="CleanText" MaxLength="300" Text="{Binding adress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="80, 0,0,0" Width="250" materialDesign:HintAssist.Hint="Endereço" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+
+                                <TextBox x:Name="phoneTextBox" PreviewKeyDown="SpaceKeyDown" PreviewTextInput="OnlyNumbers" MaxLength="13" Text="{Binding phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" materialDesign:HintAssist.Hint="Telefone" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="14"/>
+                                <TextBox x:Name="emailTextBox" PreviewKeyDown="SpaceKeyDown" PreviewTextInput="CleanText" MaxLength="300" Text="{Binding email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="130, 0,0,0" Width="250" materialDesign:HintAssist.Hint="Email" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBox x:Name="activityTextBox" LostFocus="RemoveSpaces" PreviewTextInput="CleanText" MaxLength="300" Text="{Binding main_activity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" materialDesign:HintAssist.Hint="Ramo de Atividade" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="14"/>
+                                <TextBlock Text="Fornecedor Ativo:" Margin="130,20,20,0" Foreground="Gray" FontSize="14"/>
+                                <ToggleButton IsChecked="{Binding active, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,15,0,0" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"/>
+                            </StackPanel>                            
+                        </StackPanel>
+                        <!--#endregion-->
+                        
+                        <!--#region Botöes-->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,260,0,0">
+                            <Button Command="{Binding resetCurrentProviderCommand}">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="PersonAdd" Foreground="White" Margin="0,2,8,0"/>
+                                        <TextBlock Text="Novo"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button Command="{Binding saveCurrentProviderCommand}" Margin="50,0,0,0">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="{Binding SaveBtnIcon}" Foreground="White" Margin="0,2,8,0"/>
+                                        <TextBlock Text="{Binding SaveBtnText}"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button Command="{Binding deleteCurrentProviderCommand}" Margin="50,0,0,0" IsEnabled="{Binding CanDeleteProvider}">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="PersonRemove" Foreground="White" Margin="0,2,8,0"/>
+                                        <TextBlock Text="Excluir"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <!--#endregion-->
+                    </Grid>
+                </TabItem>
+                <!--#endregion-->
+            </dragablz:TabablzControl>
+            <!--#endregion-->
+        </Grid>
+    </Grid>
+</Window>

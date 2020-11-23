@@ -1,0 +1,162 @@
+﻿<Window x:Class="ProjectAlpha.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectAlpha"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewModels="clr-namespace:ProjectAlpha.ViewModels"
+        mc:Ignorable="d"
+        Title="Alpha" 
+        MinHeight="700"
+        MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        Height="{Binding height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Width="{Binding width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Top="{Binding top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Left="{Binding left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Icon="/ProjectAlpha;component/Assets/ALPHA_LOGO_BLUE.ico">
+
+    <Window.DataContext>
+        <viewModels:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid>
+            <Rectangle Height="60" VerticalAlignment="Top">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5, 0">
+                        <GradientStop Color="#3c77d8"/>
+                        <GradientStop Color="#18204b" Offset="1"/>
+                        <GradientStop Color="#2d3a85" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <!--#region Menu-->
+            <Grid Height="60" VerticalAlignment="Top">
+                <TextBlock Text="Alpha" Width="90" FontStyle="Italic" FontSize="28" Foreground="White" HorizontalAlignment="Left" Margin="30,10">
+                    <TextBlock.Effect>
+                        <DropShadowEffect/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Grid Margin="110,0,0, 0" >
+                    <StackPanel Orientation="Horizontal" Background="Transparent" Height="60">
+                        <ToolBar Background="Transparent" Style="{StaticResource MaterialDesignToolBar}">
+                            <Menu Background="Transparent" Style="{StaticResource MaterialDesignMenu}">
+                                <MenuItem Height="60" Background="Transparent" Style="{StaticResource MaterialDesignMenuItem}">
+                                    <MenuItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Home"  Foreground="White" Margin="0,1,5,0"/>
+                                            <TextBlock Text="Início" Foreground="White"/>
+                                        </StackPanel>                                       
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Height="60"  Background="Transparent" Style="{StaticResource MaterialDesignMenuItem}">
+                                    <MenuItem.Header  >
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="CreateNewFolder"    Foreground="White" Margin="0,1,5,0"/>
+                                            <TextBlock Text="Cadastros" Foreground="White"/>
+                                        </StackPanel>
+                                    </MenuItem.Header>
+                                    <MenuItem Height="60" Command="{Binding showProvidersWindowCommand}" Background="{StaticResource PrimaryHueMidBrush}" Style="{StaticResource MaterialDesignMenuItem}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="AccountBox"  Foreground="White" Margin="0,1,5,0"/>
+                                                <TextBlock Text="Fornecedores" Foreground="White"/>
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem Height="60" Command="{Binding showProductsWindowCommand}" Background="{StaticResource PrimaryHueMidBrush}" Style="{StaticResource MaterialDesignMenuItem}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="ShoppingCart"  Foreground="White" Margin="0,1,5,0"/>
+                                                <TextBlock Text="Produtos" Foreground="White"/>
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                </MenuItem>
+                                <MenuItem Command="{Binding signOutCommand}" Height="60" Background="Transparent" Style="{StaticResource MaterialDesignMenuItem}">
+                                    <MenuItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="ExitRun"  Foreground="White" Margin="0,1,5,0"/>
+                                            <TextBlock Text="Sair" Foreground="White"/>
+                                        </StackPanel>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                            </Menu>
+                        </ToolBar>
+                    </StackPanel>
+
+
+                </Grid>
+            </Grid>
+            <Grid x:Name="registerSubMenu" Margin="245,50,0,0" Width="135" VerticalAlignment="Top" HorizontalAlignment="Left" Height="{Binding registerSubMenuHeight}">
+                <ToolBar Height="80" Width="135">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5, 0">
+                                <GradientStop Color="#61a0ff"/>
+                                <GradientStop Color="#3083ff" Offset="0.5"/>
+                                <GradientStop Color="#194d9a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Button ></Button>
+                    <Menu>
+                        <MenuItem Header="Menu">
+                            <MenuItem>
+                                <StackPanel>
+                                    <Button x:Name="providersMenuBtn" Command="{Binding showProvidersWindowCommand}" VerticalAlignment="Top" Height="40" Margin="0" Background="Transparent" Foreground="White" HorizontalContentAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="AccountBox"  Foreground="White" Margin="0,2,2,0"/>
+                                            <TextBlock Text="Fornecedores"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="productsMenuBtn" Command="{Binding showProductsWindowCommand}" VerticalAlignment="Top" Height="40" Margin="0" Background="Transparent" Foreground="White" HorizontalContentAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="ShoppingCart"  Foreground="White" Margin="0,2,2,0"/>
+                                            <TextBlock Text="Produtos"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
+                </ToolBar>
+
+            </Grid>
+            <!--#endregion-->
+            <!--#region Painel Principal-->
+            <Grid Margin="0,60,0,0">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Button Command="{Binding maxProductWindowCommand}" Background="Transparent" BorderThickness="0" Width="170" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,0" Visibility="{Binding productThumbIsVisible}">
+                        <Image Source="/Assets/productThumb.png"/>
+                    </Button>
+                    <Button Command="{Binding maxProviderWindowCommand}" Background="Transparent" BorderThickness="0" Width="170" Height="100" Margin="5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="{Binding providerThumbIsVisible}" >
+                    <Image Source="/Assets/providerThumb.png"/>
+                    </Button>
+                    </StackPanel>                
+                <StackPanel Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">                    
+                    <Image Source="/Assets/ALPHA_LOGO_BLUE.png" Width="200" Height="120"/>
+                    <TextBlock Text="Alpha - Sistema de Gestão" HorizontalAlignment="Center" Foreground="#666666" FontSize="14"/>
+                </StackPanel>
+                <TextBlock Text="Desenvolvido por Leonardo Carvalho - 2020" Margin="263,0,379,20" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="#6b6b6b" FontSize="12" Grid.Column="1"/>
+                <Grid VerticalAlignment="Bottom" Height="20" Grid.ColumnSpan="2">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5, 0">
+                                <GradientStop Color="#3c77d8"/>
+                                <GradientStop Color="#18204b" Offset="1"/>
+                                <GradientStop Color="#2d3a85" Offset="0.8"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <StackPanel Orientation="Horizontal" Height="20">
+                        <TextBlock  Text="Usuário: " Foreground="White" HorizontalAlignment="Left" FontSize="14" VerticalAlignment="Bottom" Margin="5,0,0,1"/>
+                        <TextBlock x:Name="logedUserTextBlock"  Text="{Binding userFirstName}" Foreground="White" HorizontalAlignment="Left" FontSize="16" Margin="5,0,0,1" VerticalAlignment="Bottom"/>
+                    </StackPanel>                    
+                </Grid>
+            </Grid>
+            <!--#endregion-->
+        </Grid>
+    </Grid>
+</Window>
